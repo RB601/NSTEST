@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>True / False Quiz (Points Summary)</title>
+</head>
+<body>
+  <h1>National Socalism Similarity test</h1>
+  <p>This test will see if you share National Socalist ideas, it doesn't test for specifics just general so for example if you think one group of people should be genicided it wont ask if they are jews or not just do you think that. If you check a box that means you agree if you don't that means you dont agree</p>
+
+  <form id="quizForm">
+    <div id="questions"></div>
+
+    <p>
+      <button type="button" id="submitBtn">Submit</button>
+      <button type="button" id="resetBtn">Reset</button>
+    </p>
+  </form>
+
+  <div id="result" aria-live="polite"></div>
+
+  <script>
+    // Quiz data: each item has the statement text and point values for true/false.
+    const quiz = [
+      { id: 'q1', text: 'One race of people is causing alot of problems behind closed doors.', truePoints: 1, falsePoints: 0 },
+      { id: 'q2', text: 'Murder is sometimes nessicary agaist certain groups, if it benfits my society.', truePoints: 1, falsePoints: 0 },
+      { id: 'q3', text: 'People who are unable to provide should not be allowed to exist in society', truePoints: 1, falsePoints: 0 },
+      { id: 'q4', text: 'Nationalism is pointless, borders do not matter.', truePoints: 0, falsePoints: 1 },
+      { id: 'q5', text: 'Some races are worse then others.', truePoints: 1, falsePoints: 0 },
+      { id: 'q6', text: 'Some countrys are better then others.', truePoints: 0, falsePoints: 1 },
+      { id: 'q7', text: 'Some relgions are worse then others.', truePoints: 1, falsePoints: 0 },
+      { id: 'q8', text: 'If a person is elected, and they are given absolute power by the people. Should they be allowed to keep it.', truePoints: 1, falsePoints: 0 },
+      { id: 'q9', text: 'If a group of people is historically oppressed it should do anything to regain its lost territory or power.', truePoints: 1, falsePoints: 0 },
+      { id: 'q10', text: 'Some ideologys are dangerous and should not be allowed to sink there hooks into our peoples minds.', truePoints: 1, falsePoints: 0 },
+      { id: 'q11', text: 'Human death weither accidential or otherwise can be a just sacrifice for my cause.', truePoints: 1, falsePoints: 0 },
+      { id: 'q12', text: 'The media should promote my ideology as it is right.', truePoints: 1, falsePoints: 0 },
+      { id: 'q13', text: 'People generally do not know what they want, it should be up to my state to decied.', truePoints: 1, falsePoints: 0 },
+      { id: 'q14', text: 'Millitary or police efforts are important to spread my ideology.', truePoints: 1, falsePoints: 0 },
+      { id: 'q15', text: 'My ideology should spread far and wide if we want to fix this world.', truePoints: 1, falsePoints: 0 },
+      { id: 'q16', text: 'Less successful ideas should not corrupt the purity of my ideas.', truePoints: 1, falsePoints: 0 },
+      { id: 'q17', text: 'I would describe myself as a Nazi.', truePoints: 1, falsePoints: 0 },
+      { id: 'q18', text: 'You should be proud of your nationality.', truePoints: 1, falsePoints: 0 },
+      { id: 'q19', text: 'Nationality shows your peoples struggle and that is why you should be proud of it.', truePoints: 1, falsePoints: 0 },
+      { id: 'q20', text: 'I would support state owned bussiness.', truePoints: 1, falsePoints: 0 },
+      { id: 'q21', text: 'I would support state owned utillites.', truePoints: 1, falsePoints: 0 },
+      { id: 'q22', text: 'I would support state owned media.', truePoints: 1, falsePoints: 0 },
+      { id: 'q23', text: 'Strikes are a pain and the state should prevent them.', truePoints: 1, falsePoints: 0 },
+      { id: 'q24', text: 'Christanity should not interfer with my ideology.', truePoints: 1, falsePoints: 0 },
+      { id: 'q25', text: 'Islam should not interfer with my ideology.', truePoints: 1, falsePoints: 0 },
+      { id: 'q26', text: 'Judism should not interfer with my ideology.', truePoints: 1, falsePoints: 0 },
+      { id: 'q27', text: 'Other relgion should not interfer with my ideology.', truePoints: 4, falsePoints: 0 },
+      { id: 'q31', text: 'Relgion is foolish your sole alegence should be to my cause or my state.', truePoints: 1, falsePoints: 0 },
+      { id: 'q32', text: 'It is conserning that many people put there allegence in the state instead of god or science.', truePoints: 0, falsePoints: 1 },
+      { id: 'q33', text: 'Some groups dont fit into society and they cause too many problems.', truePoints: 1, falsePoints: 0 },
+      { id: 'q34', text: 'The media lies and is harming my ideology.', truePoints: 1, falsePoints: 0 },
+      { id: 'q35', text: 'I do not trust the current goverment to allow poltical discorse we should meet up and talk outside prying eyes.', truePoints: 1, falsePoints: 0 },
+      { id: 'q36', text: 'Education should teach the struggles of certain races and groups.', truePoints: 1, falsePoints: 0 },
+      { id: 'q37', text: 'The people who oppress me should be punished.', truePoints: 1, falsePoints: 0 },
+      { id: 'q38', text: 'Harsh punishment is nessicary.', truePoints: 1, falsePoints: 0 },
+      { id: 'q39', text: 'I belive in a super race.', truePoints: 1, falsePoints: 0 },
+      { id: 'q40', text: 'Some races should not be allowed to lead because of there past failures and problems leading.', truePoints: 1, falsePoints: 0 },
+    ];
+
+    const questionsContainer = document.getElementById('questions');
+    const resultDiv = document.getElementById('result');
+    const submitBtn = document.getElementById('submitBtn');
+    const resetBtn = document.getElementById('resetBtn');
+
+    // Render the questions.
+    function renderQuestions() {
+      questionsContainer.innerHTML = '';
+
+      quiz.forEach(item => {
+        const wrapper = document.createElement('div');
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.id = item.id;
+        checkbox.name = item.id;
+
+        const label = document.createElement('label');
+        label.htmlFor = item.id;
+        label.textContent = ' ' + item.text;
+
+        wrapper.appendChild(checkbox);
+        wrapper.appendChild(label);
+        questionsContainer.appendChild(wrapper);
+      });
+    }
+
+    // Evaluate: sum points based on checked status and predefined point values.
+    function evaluate() {
+      let totalPoints = 0;
+      let maxPoints = 0;
+      const feedbackList = document.createElement('ol');
+
+      quiz.forEach(item => {
+        const checkbox = document.getElementById(item.id);
+        const userChecked = checkbox.checked;
+        const points = userChecked ? item.truePoints : item.falsePoints;
+        totalPoints += points;
+        // Determine max possible points for this question
+        maxPoints += Math.max(item.truePoints, item.falsePoints);
+
+        const li = document.createElement('li');
+        li.textContent = `${item.text} — You chose ${userChecked ? 'True' : 'False'}: +${points} points.`;
+        feedbackList.appendChild(li);
+      });
+
+      resultDiv.innerHTML = '';
+      const scoreP = document.createElement('p');
+      scoreP.textContent = `You got ${totalPoints} out of ${maxPoints} points.`;
+      resultDiv.appendChild(scoreP);
+      resultDiv.appendChild(feedbackList);
+    }
+
+    function resetQuiz() {
+      document.getElementById('quizForm').reset();
+      resultDiv.innerHTML = '';
+    }
+
+    submitBtn.addEventListener('click', evaluate);
+    resetBtn.addEventListener('click', resetQuiz);
+
+    renderQuestions();
+  </script>
+</body>
+</html>
